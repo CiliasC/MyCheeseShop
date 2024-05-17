@@ -12,21 +12,14 @@ namespace MyCheeseShop.Context
             _context = context;
         }
 
-        public async Task<List<Cheese>> GetAllCheesesAsync()
+        public async Task<List<Cheese>> GetAllCheeseAsync()
         {
             return await _context.Cheeses.OrderBy(cheese => cheese.Name).ToListAsync();
         }
 
-        public async Task AddCheeseAsync(Cheese cheese)
+        public Cheese? GetCheese(int id)
         {
-            _context.Cheeses.Add(cheese);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateCheeseAsync(Cheese cheese)
-        {
-            _context.Cheeses.Update(cheese);
-            await _context.SaveChangesAsync();
+            return _context.Cheeses.Find(id);
         }
     }
 }

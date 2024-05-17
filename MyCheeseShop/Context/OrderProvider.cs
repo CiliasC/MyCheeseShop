@@ -1,34 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MyCheeseShop.Model;
+﻿using MyCheeseShop.Model;
+using Microsoft.EntityFrameworkCore;
 using static MyCheeseShop.Model.Order;
+
 
 namespace MyCheeseShop.Context
 {
     public class OrderProvider
     {
         private readonly DatabaseContext _context;
-
         public OrderProvider(DatabaseContext context)
         {
             _context = context;
         }
-
-        public async Task<List<Order>?> GetOrdersAsync(User? user)
-        {
-            if (user == null) return null;
-
-           
-            return await _context.Orders
-                .Where(order => order.User.UserName == user.UserName)
-                .Include(order => order.Items)
-                .ThenInclude(item => item.Cheese)
-                .OrderByDescending(order => order.Created)
-                .ToListAsync();
-        }
-
         public async Task CreateOrder(User user, IEnumerable<CartItem> items)
         {
-            
             var order = new Order
             {
                 User = user,
@@ -41,12 +26,9 @@ namespace MyCheeseShop.Context
                 Status = OrderStatus.Placed
             };
 
-            
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
         }
-
-
 
     }
 }
